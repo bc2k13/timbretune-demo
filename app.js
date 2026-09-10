@@ -7,6 +7,20 @@
     $('loading').textContent = 'The audio examples could not be loaded. Please reload the page.';
     return;
   }
+  // Enforce the website limit even when a browser reuses an older data file.
+  const maxAlpha = Math.min(0.95, data.controls?.max_alpha ?? 0.95);
+  data.controls = { ...data.controls, max_alpha: maxAlpha };
+  data.pairs.forEach(pair => {
+    pair.morphs = Object.fromEntries(Object.entries(pair.morphs)
+      .filter(([alpha]) => Number(alpha) <= maxAlpha));
+  });
+  document.querySelectorAll('[data-alpha]').forEach(button => {
+    if (Number(button.dataset.alpha) > maxAlpha) button.remove();
+  });
+  if (data.presentation) {
+    data.presentation.end_label = 'Toward reference';
+    data.presentation.explanation = `Morph settings run from 0 to ${maxAlpha.toFixed(2)}. Zero is a reconstructed source; use the Source player to compare with the original recording.`;
+  }
   const tracks = ['source', 'reference', 'output'].map(role => $(role + '-audio'));
   let selectedPair = data.pairs[0];
   let selectedAlpha = '0.50';
@@ -18,7 +32,7 @@
   const status = (message) => { $('player-status').textContent = message; };
   const roundAlpha = (value) => {
     const min = data.controls?.min_alpha ?? 0.05;
-    const max = data.controls?.max_alpha ?? 0.95;
+    const max = maxAlpha;
     return (Math.max(min * 20, Math.min(max * 20, Math.round(Number(value) * 20))) / 20).toFixed(2);
   };
   const duration = (seconds) => `${Number(seconds).toFixed(2)} s`;
@@ -144,7 +158,7 @@
     $('pair-category').textContent = pair.category.toUpperCase();
     $('take-count').textContent = `${Object.keys(pair.morphs).length} settings`;
     $('morph-slider').min = Math.round((data.controls?.min_alpha ?? 0.05) * 20);
-    $('morph-slider').max = Math.round((data.controls?.max_alpha ?? 0.95) * 20);
+    $('morph-slider').max = Math.round(maxAlpha * 20);
     document.querySelectorAll('.example-button').forEach(button => {
       button.setAttribute('aria-pressed', String(button.dataset.pair === pair.id));
     });
