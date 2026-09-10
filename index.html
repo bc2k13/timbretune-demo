@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="TimbreTune is a vocal timbre morphing plug-in. Compare source and reference recordings with TimbreTune morphs from 0 to 1.">
+  <meta name="description" content="TimbreTune is a vocal timbre morphing plug-in. Compare source and reference recordings with TimbreTune morphs from 0 to 0.95.">
   <meta name="author" content="Ben Cole, Annie Chu">
   <meta name="theme-color" content="#000000">
   <title>TimbreTune — Vocal morphing</title>
@@ -36,11 +36,11 @@
             <section class="track reference-track"><div class="track-heading"><h4><span class="track-dot"></span>Reference</h4><span id="reference-name"></span></div><div class="waveform" id="reference-wave" aria-hidden="true"></div><audio id="reference-audio" controls preload="none" aria-label="Play reference voice"></audio><div class="track-caption" id="reference-caption"></div></section>
           </div>
           <section class="morph-track" aria-labelledby="morph-title"><div class="morph-heading"><div><div class="console-eyebrow">TimbreTune morph</div><h4 id="morph-title">Morph amount</h4></div><output for="morph-slider" id="alpha-value">0.50</output></div>
-            <label class="visually-hidden" for="morph-slider">Morph amount</label><input id="morph-slider" type="range" min="0" max="20" step="1" value="10" aria-describedby="morph-explanation"><div class="slider-labels"><span>Reconstructed source</span><span>Converted endpoint</span></div>
-            <div class="presets" role="group" aria-label="Quick morph settings"><button data-alpha="0.10">0.10</button><button data-alpha="0.25">0.25</button><button data-alpha="0.50" aria-pressed="true">0.50</button><button data-alpha="0.75">0.75</button><button data-alpha="1.00">1.00</button></div>
+            <label class="visually-hidden" for="morph-slider">Morph amount</label><input id="morph-slider" type="range" min="0" max="19" step="1" value="10" aria-describedby="morph-explanation"><div class="slider-labels"><span>Reconstructed source</span><span>Toward reference</span></div>
+            <div class="presets" role="group" aria-label="Quick morph settings"><button data-alpha="0.10">0.10</button><button data-alpha="0.25">0.25</button><button data-alpha="0.50" aria-pressed="true">0.50</button><button data-alpha="0.75">0.75</button><button data-alpha="0.95">0.95</button></div>
             <div class="output-player"><div id="output-wave" class="waveform" aria-hidden="true"></div><audio id="output-audio" controls preload="none" aria-label="Play synthesized morph"></audio></div>
             <div class="player-options"><label><input type="checkbox" id="keep-position" checked> Keep source / morph position</label><a id="download-output" href="#" download>Download WAV <span aria-hidden="true">↓</span></a></div>
-            <p id="morph-explanation">0 is a reconstructed source; 1 is the converted endpoint. Use the Source player to compare with the original recording.</p>
+            <p id="morph-explanation">Morph settings run from 0 to 0.95. Zero is a reconstructed source; use the Source player to compare with the original recording.</p>
           </section>
           <div class="render-strip">TimbreTune · 44.1 kHz · 24-bit WAV</div>
           <details class="technical-details"><summary>Audio details</summary><p>These TimbreTune samples use an offline rendering workflow: source and converted-performance log-mel spectrograms are aligned, interpolated, and resynthesized with BigVGAN. The plug-in and paper evaluation use SLERP conditioning instead.</p><p>The conversion guide uses a 0.95 morph, 100 diffusion steps, CFG 0.5, and Auto F0 off. Playback is mono 44.1 kHz, 24-bit WAV, with level matching and at least 1.5 dB of true-peak headroom.</p><p><a href="manifest.json">Audio settings and files</a> · <a href="credits.html">Audio credits</a></p></details>
