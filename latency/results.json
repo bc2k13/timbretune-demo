@@ -1,0 +1,407 @@
+{
+  "machine": "Apple M1 Pro",
+  "memory_gb": 16,
+  "device": "PyTorch MPS",
+  "successful_requests": 132,
+  "failures": 0,
+  "cached_startup_seconds": 11.81,
+  "source": "Paper baseline with a separately measured extended-step follow-up",
+  "latency_definition": "HTTP submission through completed WAV download, after warm-up.",
+  "settings": {
+    "reference_seconds": 8,
+    "alpha": 0.5,
+    "cfg": 0.7,
+    "auto_f0": true,
+    "length_adjust": 1,
+    "pitch_shift": 0
+  },
+  "runs": [
+    {
+      "id": "paper_baseline",
+      "steps": [
+        1,
+        5,
+        10,
+        25,
+        50
+      ],
+      "successful_requests": 90,
+      "cached_startup_seconds": 11.81,
+      "summary_sha256": "504f5d7418c42126278783cd113907bd041894a213adc23edea0ab56bb973d14"
+    },
+    {
+      "id": "followup_high_steps",
+      "steps": [
+        60,
+        70,
+        80,
+        90,
+        100,
+        110,
+        120
+      ],
+      "source_seconds": [
+        5.0,
+        10.0
+      ],
+      "successful_requests": 42,
+      "started_at": "2026-09-09T10:43:17.328556+00:00",
+      "cached_startup_seconds": 14.394544000009773,
+      "summary_sha256": "5aa76dcbfe22bda681d247139c3eba4e0762021ed62c33af92a441fa250bfb5c"
+    }
+  ],
+  "rows": [
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 1.0,
+      "steps": 1,
+      "n": 3,
+      "mean_seconds": 3.5204471806694833,
+      "sd_seconds": 0.6697896836783163
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 1.0,
+      "steps": 5,
+      "n": 3,
+      "mean_seconds": 4.981284861001768,
+      "sd_seconds": 0.14720540361382473
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 1.0,
+      "steps": 10,
+      "n": 3,
+      "mean_seconds": 6.500491000003724,
+      "sd_seconds": 0.1916230556575745
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 1.0,
+      "steps": 25,
+      "n": 3,
+      "mean_seconds": 10.823406305663715,
+      "sd_seconds": 0.7576412413232623
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 1.0,
+      "steps": 50,
+      "n": 3,
+      "mean_seconds": 18.212696347327437,
+      "sd_seconds": 0.19005996169171027
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 3.0,
+      "steps": 1,
+      "n": 3,
+      "mean_seconds": 5.363640444668515,
+      "sd_seconds": 0.47098796465376225
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 3.0,
+      "steps": 5,
+      "n": 3,
+      "mean_seconds": 6.287463180657748,
+      "sd_seconds": 0.2462818370333878
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 3.0,
+      "steps": 10,
+      "n": 3,
+      "mean_seconds": 8.455913208332882,
+      "sd_seconds": 0.2291805614541691
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 3.0,
+      "steps": 25,
+      "n": 3,
+      "mean_seconds": 13.971447722011362,
+      "sd_seconds": 0.46882539644030735
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 3.0,
+      "steps": 50,
+      "n": 3,
+      "mean_seconds": 23.071411791674716,
+      "sd_seconds": 0.5463743212903422
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 5.0,
+      "steps": 1,
+      "n": 3,
+      "mean_seconds": 7.442339167008565,
+      "sd_seconds": 0.4585685702055821
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 5.0,
+      "steps": 5,
+      "n": 3,
+      "mean_seconds": 9.489946125002461,
+      "sd_seconds": 0.893088496576131
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 5.0,
+      "steps": 10,
+      "n": 3,
+      "mean_seconds": 11.426444666668734,
+      "sd_seconds": 0.28765651208802506
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 5.0,
+      "steps": 25,
+      "n": 3,
+      "mean_seconds": 18.53196373633303,
+      "sd_seconds": 0.8266225731030372
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 5.0,
+      "steps": 50,
+      "n": 3,
+      "mean_seconds": 28.679636166329146,
+      "sd_seconds": 0.09277282383922805
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 10.0,
+      "steps": 1,
+      "n": 3,
+      "mean_seconds": 12.53513147198828,
+      "sd_seconds": 1.009227341104122
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 10.0,
+      "steps": 5,
+      "n": 3,
+      "mean_seconds": 14.263283472003726,
+      "sd_seconds": 1.588589280671472
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 10.0,
+      "steps": 10,
+      "n": 3,
+      "mean_seconds": 19.206365736332373,
+      "sd_seconds": 0.4762484873174519
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 10.0,
+      "steps": 25,
+      "n": 3,
+      "mean_seconds": 28.3987873053314,
+      "sd_seconds": 1.2985179874775425
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 10.0,
+      "steps": 50,
+      "n": 3,
+      "mean_seconds": 45.42891744466033,
+      "sd_seconds": 0.3223435807158952
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 20.0,
+      "steps": 1,
+      "n": 3,
+      "mean_seconds": 24.280116180331486,
+      "sd_seconds": 0.6306757249675364
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 20.0,
+      "steps": 5,
+      "n": 3,
+      "mean_seconds": 27.453633972327225,
+      "sd_seconds": 2.320300988712734
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 20.0,
+      "steps": 10,
+      "n": 3,
+      "mean_seconds": 32.74841780566688,
+      "sd_seconds": 1.392292690223649
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 20.0,
+      "steps": 25,
+      "n": 3,
+      "mean_seconds": 51.4124921666662,
+      "sd_seconds": 1.5784649898730163
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 20.0,
+      "steps": 50,
+      "n": 3,
+      "mean_seconds": 81.34083999999955,
+      "sd_seconds": 2.4826369025379575
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 30.0,
+      "steps": 1,
+      "n": 3,
+      "mean_seconds": 35.55933923633226,
+      "sd_seconds": 3.8671881530629655
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 30.0,
+      "steps": 5,
+      "n": 3,
+      "mean_seconds": 41.11639712466664,
+      "sd_seconds": 2.4853781375181643
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 30.0,
+      "steps": 10,
+      "n": 3,
+      "mean_seconds": 53.062258722333354,
+      "sd_seconds": 6.553869186835093
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 30.0,
+      "steps": 25,
+      "n": 3,
+      "mean_seconds": 80.74607711099573,
+      "sd_seconds": 3.736191140148919
+    },
+    {
+      "benchmark_run": "paper_baseline",
+      "source_seconds": 30.0,
+      "steps": 50,
+      "n": 3,
+      "mean_seconds": 128.47077451399915,
+      "sd_seconds": 2.894109711158103
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 60,
+      "n": 3,
+      "mean_seconds": 27.060572110989597,
+      "sd_seconds": 0.6996931442479735
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 70,
+      "n": 3,
+      "mean_seconds": 31.378871124994475,
+      "sd_seconds": 1.6535519170244093
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 80,
+      "n": 3,
+      "mean_seconds": 35.087086416324986,
+      "sd_seconds": 1.5551549995201006
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 90,
+      "n": 3,
+      "mean_seconds": 38.60334808331876,
+      "sd_seconds": 1.501225781255706
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 100,
+      "n": 3,
+      "mean_seconds": 41.348400486662285,
+      "sd_seconds": 0.32601830932647213
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 110,
+      "n": 3,
+      "mean_seconds": 47.29192701367234,
+      "sd_seconds": 3.423420339121105
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 5.0,
+      "steps": 120,
+      "n": 3,
+      "mean_seconds": 49.383921666662594,
+      "sd_seconds": 2.1842007987656373
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 60,
+      "n": 3,
+      "mean_seconds": 41.26708369400391,
+      "sd_seconds": 0.22077662172763451
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 70,
+      "n": 3,
+      "mean_seconds": 46.33152934700289,
+      "sd_seconds": 0.7366261355321729
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 80,
+      "n": 3,
+      "mean_seconds": 52.38974920799956,
+      "sd_seconds": 0.5538469339839681
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 90,
+      "n": 3,
+      "mean_seconds": 57.35628245800035,
+      "sd_seconds": 0.9443247820578038
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 100,
+      "n": 3,
+      "mean_seconds": 63.102983694329545,
+      "sd_seconds": 1.2824865711238451
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 110,
+      "n": 3,
+      "mean_seconds": 67.92643129166875,
+      "sd_seconds": 0.7639811394277083
+    },
+    {
+      "benchmark_run": "followup_high_steps",
+      "source_seconds": 10.0,
+      "steps": 120,
+      "n": 3,
+      "mean_seconds": 73.50708322199837,
+      "sd_seconds": 0.8506180486457317
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "source": "User-supplied ISMIR 2026 draft, 2026-09-09",
+  "matching_local_table": "TimbreTune_ISMIR_LBD_26/spacing_only_132_requests.tex",
+  "matching_local_table_sha256": "01ecc84bee8ae357f3b069f818500a06f9842cad43fe9b6af1078b0fb064b624",
+  "pairs": 5,
+  "alpha_settings": 21,
+  "table_precision": "Values reproduced exactly as reported, to three decimal places.",
+  "files": {
+    "similarity-trajectory.png": {
+      "source": "TimbreTune_ISMIR_LBD_26/eval_plot_compact.png",
+      "sha256": "adedad8e27e4ddb3f5a7b9e2cb0f47830d34d056fe6a57a43703c7e43a6e2244"
+    },
+    "plugin-interface.png": {
+      "source": "TimbreTune_ISMIR_LBD_26/timbretune1.png",
+      "sha256": "49d6018dc16e92dba16f5bee19c52e95d29ecaa84411cf4915714d1d9925fc2b"
+    },
+    "trajectory-campplus.csv": {
+      "source": "evaluation/eval_report.csv",
+      "sha256": "eb92089814822bf0f36cf0c3c542de13b35d2725184bb63b14afda9de8b6c217"
+    },
+    "trajectory-ecapa.csv": {
+      "source": "evaluation/eval_report_ecapa.csv",
+      "sha256": "919002a09679a77240801084a4bd234aa16025c1e0e2bbc43de283309b7af254"
+    }
+  }
+}
