@@ -10,6 +10,10 @@
   const counts = [...new Set(data.rows.map(row => row.steps))].sort((a, b) => a - b);
   const max = Math.ceil(Math.max(...data.rows.map(row => row.mean_seconds)) / 10) * 10;
   const defaultSteps = counts.includes(100) ? 100 : 10;
+  const example = data.rows.find(row => row.source_seconds === 5 && row.steps === defaultSteps)
+    || data.rows.find(row => row.steps === defaultSteps);
+  document.getElementById('latency-example-time').textContent = `${format(example.mean_seconds)} s`;
+  document.getElementById('latency-example-description').textContent = `Mean render time for a ${example.source_seconds}-second input at ${defaultSteps} diffusion steps`;
   const controls = document.querySelector('.latency-buttons');
   controls.replaceChildren();
   for (const steps of counts) {
@@ -28,7 +32,8 @@
     th.textContent = label;
     header.append(th);
   }
-  document.getElementById('latency-summary').textContent = `${data.successful_requests} successful requests across ${data.rows.length} configurations; ${data.failures} failures.`;
+  document.getElementById('latency-success').textContent = `${data.successful_requests} / ${data.successful_requests + data.failures}`;
+  document.getElementById('latency-configurations').textContent = `Successful measured requests across ${data.rows.length} configurations`;
   document.getElementById('latency-observations').textContent = `All ${data.successful_requests + data.failures} observations`;
   const followup = data.runs?.find(run => run.id === 'followup_high_steps');
   const startup = document.getElementById('latency-startup-description');
@@ -36,10 +41,13 @@
     startup.textContent = `Cached startup: ${format(data.cached_startup_seconds)} s in the original test${followup ? `; ${format(followup.cached_startup_seconds)} s in the follow-up` : ''}. Excluded from render times.`;
   }
   if (followup) {
+    const stepLabel = followup.steps.length === 1 ? followup.steps[0]
+      : `${followup.steps[0]}–${followup.steps[followup.steps.length - 1]}`;
+    const durationLabel = followup.source_seconds.map(n => `${n}-second`).join(' and ');
     const listeningNote = window.TIMBRETUNE_DEMOS?.settings?.method !== 'historical_slerp_joint_prompt'
       ? 'The listening samples use additional offline processing that is not included in this plug-in benchmark.'
       : 'The listening examples use CFG 0.5 and Auto F0 off.';
-    document.getElementById('latency-context').textContent = `The 60–120-step follow-up uses 5- and 10-second inputs in a separate session. Both runs use CFG 0.7 and Auto F0 on. ${listeningNote}`;
+    document.getElementById('latency-context').textContent = `The original benchmark covers 1–50 steps. Results at ${stepLabel} steps come from a separate test with ${durationLabel} inputs. Both use CFG 0.7 and Auto F0 on. ${listeningNote} These tests measure time, not audio quality.`;
     document.getElementById('latency-test-setup').textContent = 'Three repetitions per tested configuration. Requests ran one at a time in randomized order after warm-up, with an 8-second reference, morph amount 0.5, length factor 1, and no pitch shift. Long inputs repeat the source recording. The extended-step test ran in a separate session on a working desktop; the two runs were not interleaved. Cached startup excludes first-time model downloads. A dash in the table means that combination was not tested.';
   }
 

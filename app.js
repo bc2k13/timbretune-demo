@@ -19,7 +19,7 @@
   });
   if (data.presentation) {
     data.presentation.end_label = 'Toward reference';
-    data.presentation.explanation = 'At zero, the morph is a reconstructed source. The Source player contains the original recording.';
+    data.presentation.explanation = `Morph settings run from 0 to ${maxAlpha.toFixed(2)}. Zero is a reconstructed source; use the Source player to compare with the original recording.`;
   }
   const tracks = ['source', 'reference', 'output'].map(role => $(role + '-audio'));
   let selectedPair = data.pairs[0];
@@ -35,6 +35,7 @@
     const max = maxAlpha;
     return (Math.max(min * 20, Math.min(max * 20, Math.round(Number(value) * 20))) / 20).toFixed(2);
   };
+  const duration = (seconds) => `${Number(seconds).toFixed(2)} s`;
 
   function drawWave(id, peaks) {
     const ns = 'http://www.w3.org/2000/svg';
@@ -69,6 +70,7 @@
     pendingSeek = keep && $('keep-position').checked ? oldTime : null;
     pendingPlay = wasPlaying && Boolean(recording);
     selectedAlpha = alpha;
+    output.parentElement.querySelector('.play-toggle').disabled = !recording;
     $('morph-slider').value = Math.round(Number(alpha) * 20);
     $('morph-slider').setAttribute('aria-valuetext', `${alpha} morph amount`);
     $('alpha-value').textContent = alpha;
@@ -111,6 +113,18 @@
   });
 
   tracks.forEach(track => {
+    const button = document.createElement('button');
+    const role = track.id.replace('-audio', '');
+    const label = role === 'output' ? 'morph' : role;
+    button.className = 'play-toggle';
+    button.type = 'button';
+    button.textContent = `▶ Play ${label}`;
+    button.setAttribute('aria-label', `Play ${label}`);
+    track.before(button);
+    button.addEventListener('click', () => {
+      if (!track.paused) track.pause();
+      else track.play().catch(() => status('The recording could not start. Try another setting or reload the page.'));
+    });
     track.addEventListener('play', () => {
       if (track !== output) {
         // A deliberate source/reference play cancels a morph awaiting metadata.
@@ -122,7 +136,13 @@
         track.currentTime = Math.min(counterpart.currentTime, Math.max(0, track.duration - .02));
       }
       tracks.filter(other => other !== track).forEach(other => other.pause());
+      button.textContent = `Ⅱ Pause ${label}`;
+      button.setAttribute('aria-label', `Pause ${label}`);
       status('');
+    });
+    track.addEventListener('pause', () => {
+      button.textContent = `▶ Play ${label}`;
+      button.setAttribute('aria-label', `Play ${label}`);
     });
     track.addEventListener('error', () => {
       if (track.getAttribute('src')) status('This recording could not be loaded. Check the audio file or try another example.');
@@ -135,6 +155,8 @@
     pendingSeek = null;
     pendingPlay = false;
     $('pair-title').textContent = pair.title;
+    $('pair-category').textContent = pair.category.toUpperCase();
+    $('take-count').textContent = `${Object.keys(pair.morphs).length} settings`;
     $('morph-slider').min = Math.round((data.controls?.min_alpha ?? 0.05) * 20);
     $('morph-slider').max = Math.round(maxAlpha * 20);
     document.querySelectorAll('.example-button').forEach(button => {
@@ -143,18 +165,28 @@
     for (const role of ['source', 'reference']) {
       const clip = pair[role];
       $(role + '-name').textContent = clip.speaker_id.replace('vocalset_', '').replace('librispeech_', 'reader ');
+      $(role + '-caption').textContent = `${clip.dataset} · ${duration(clip.duration_seconds)}`;
       setAudio($(role + '-audio'), clip);
       drawWave(role + '-wave', clip.peaks);
     }
     selectAlpha(pair.morphs[selectedAlpha] ? selectedAlpha : Object.keys(pair.morphs)[0], { keep: false });
   }
 
-  data.pairs.forEach(pair => {
+  data.pairs.forEach((pair, index) => {
     const button = document.createElement('button');
     button.className = 'example-button';
     button.dataset.pair = pair.id;
     button.dataset.category = pair.category;
-    button.textContent = pair.title;
+    const number = document.createElement('span');
+    number.className = 'example-index';
+    number.textContent = String(index + 1).padStart(2, '0');
+    const text = document.createElement('span');
+    const title = document.createElement('strong');
+    title.textContent = pair.title;
+    const subtitle = document.createElement('small');
+    subtitle.textContent = `${pair.category} · ${duration(pair.source.duration_seconds)}`;
+    text.append(title, subtitle);
+    button.append(number, text);
     button.addEventListener('click', () => selectPair(data.pairs.find(item => item.id === pair.id)));
     $('pair-list').append(button);
   });
@@ -169,6 +201,7 @@
     const ids = new Set(visible.map(pair => pair.id));
     document.querySelectorAll('[data-filter]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === activeFilter)));
     document.querySelectorAll('.example-button').forEach(button => { button.hidden = !ids.has(button.dataset.pair); });
+    $('example-count').textContent = `${visible.length} / ${data.pairs.length}`;
     if ($('no-examples')) $('no-examples').hidden = visible.length > 0;
     if (visible.length && !visible.includes(selectedPair)) selectPair(visible[0]);
   }
@@ -196,6 +229,7 @@
     const labels = document.querySelector('.slider-labels');
     labels.firstElementChild.textContent = presentation.start_label;
     labels.lastElementChild.textContent = presentation.end_label;
+    document.querySelector('.render-strip').textContent = `${presentation.label} · 44.1 kHz · 24-bit WAV · matched volume`;
     const details = document.querySelector('.technical-details');
     const summary = document.createElement('summary');
     summary.textContent = 'Audio details';
@@ -214,6 +248,7 @@
     details.append(links);
   }
   showCollectionDetails();
+  $('example-count').textContent = String(data.pairs.length).padStart(2, '0');
   $('loading').hidden = true;
   $('studio').hidden = false;
   selectPair(selectedPair);
