@@ -19,7 +19,7 @@
   });
   if (data.presentation) {
     data.presentation.end_label = 'Toward reference';
-    data.presentation.explanation = `Morph settings run from 0 to ${maxAlpha.toFixed(2)}. Zero is a reconstructed source; use the Source player to compare with the original recording.`;
+    data.presentation.explanation = 'At zero, the morph is a reconstructed source. Use the Source player to hear the original.';
   }
   const tracks = ['source', 'reference', 'output'].map(role => $(role + '-audio'));
   let selectedPair = data.pairs[0];

@@ -9,12 +9,12 @@
   <title>TimbreTune — Vocal morphing</title>
   <link rel="icon" href="favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="timbretune-icon.png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="presentation.css">
+  <link rel="stylesheet" href="styles.css?v=a4f932edf08a">
+  <link rel="stylesheet" href="presentation.css?v=b87faaa81d66">
   <script src="data.js?v=c1824c46d6ee" defer></script>
-  <script src="app.js?v=56df818ea5ff" defer></script>
-  <script src="latency-data.js" defer></script>
-  <script src="latency.js" defer></script>
+  <script src="app.js?v=04d47ea04410" defer></script>
+  <script src="latency-data.js?v=b0a4a6799eb3" defer></script>
+  <script src="latency.js?v=c03b090138e3" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#listen">Skip to audio examples</a>
@@ -25,7 +25,7 @@
 <main>
   <section id="listen" class="listen-section" aria-labelledby="listen-title">
     <div class="wrap">
-      <div class="listen-intro"><h1 id="listen-title">Vocal timbre morphing</h1><p>A VST3 / AU plug-in for blending a vocal performance toward a reference voice.</p><p class="project-byline">Ben Cole, Annie Chu <span>Northwestern University</span></p></div>
+      <div class="listen-intro"><h1 id="listen-title">Vocal timbre morphing</h1><p>Blend a vocal performance toward a reference voice.</p><p class="project-byline">Ben Cole, Annie Chu <span>Northwestern University</span></p></div>
       <div id="loading" role="status">Loading audio examples…</div>
       <div class="studio" id="studio" hidden>
         <aside class="example-rail" aria-label="Choose an example"><div class="rail-heading"><span>Examples</span><span id="example-count"></span></div><div id="example-filters" class="filters" role="group" aria-label="Filter examples"></div><label class="example-search"><span class="visually-hidden">Search examples</span><input id="example-search" type="search" placeholder="Search voices or styles" autocomplete="off"></label><div id="pair-list"></div><p id="no-examples" class="empty-examples" role="status" hidden>No matches. Clear your search or choose All.</p></aside>
@@ -39,42 +39,42 @@
             <label class="visually-hidden" for="morph-slider">Morph amount</label><input id="morph-slider" type="range" min="0" max="19" step="1" value="10" aria-describedby="morph-explanation"><div class="slider-labels"><span>Reconstructed source</span><span>Toward reference</span></div>
             <div class="presets" role="group" aria-label="Quick morph settings"><button data-alpha="0.10">0.10</button><button data-alpha="0.25">0.25</button><button data-alpha="0.50" aria-pressed="true">0.50</button><button data-alpha="0.75">0.75</button><button data-alpha="0.95">0.95</button></div>
             <div class="output-player"><div id="output-wave" class="waveform" aria-hidden="true"></div><audio id="output-audio" controls preload="none" aria-label="Play synthesized morph"></audio></div>
-            <div class="player-options"><label><input type="checkbox" id="keep-position" checked> Keep source / morph position</label><a id="download-output" href="#" download>Download WAV <span aria-hidden="true">↓</span></a></div>
-            <p id="morph-explanation">Morph settings run from 0 to 0.95. Zero is a reconstructed source; use the Source player to compare with the original recording.</p>
+            <div class="player-options"><label><input type="checkbox" id="keep-position" checked> Sync source / morph position</label><a id="download-output" href="#" download>Download WAV <span aria-hidden="true">↓</span></a></div>
+            <p id="morph-explanation">At zero, the morph is a reconstructed source. Use the Source player to hear the original.</p>
           </section>
           <div class="render-strip">TimbreTune · 44.1 kHz · 24-bit WAV</div>
           <details class="technical-details"><summary>Audio details</summary><p>These TimbreTune samples use an offline rendering workflow: source and converted-performance log-mel spectrograms are aligned, interpolated, and resynthesized with BigVGAN. The plug-in and paper evaluation use SLERP conditioning instead.</p><p>The conversion guide uses a 0.95 morph, 100 diffusion steps, CFG 0.5, and Auto F0 off. Playback is mono 44.1 kHz, 24-bit WAV, with level matching and at least 1.5 dB of true-peak headroom.</p><p><a href="manifest.json">Audio settings and files</a> · <a href="credits.html">Audio credits</a></p></details>
           <p class="player-status" id="player-status" role="status" aria-live="polite"></p>
         </div>
       </div>
-      
+
     </div>
   </section>
 
   <section id="method" class="content-section research-section wrap" aria-labelledby="method-title">
-    <div class="section-heading"><div><div class="eyebrow">About TimbreTune</div><h2 id="method-title">Method and plug-in</h2></div><p>A creative vocal effect for exploring intermediate timbres while retaining the source performance. Built on pretrained Seed-VC, without retraining or fine-tuning.</p></div>
+    <div class="section-heading"><div><div class="eyebrow">Plug-in</div><h2 id="method-title">Method</h2></div><p>TimbreTune adapts pretrained Seed-VC for vocal morphing without retraining.</p></div>
     <div class="method-layout">
       <div>
         <ol class="method-steps">
-          <li><h3>Encode the performance</h3><p>Whisper extracts source content, F0 supplies pitch conditioning, and CAMPPlus encodes the source and reference speaker identities.</p></li>
-          <li><h3>Blend two conditioning signals</h3><p>The morph amount α interpolates speaker embeddings with SLERP and scales the reference log-mel prompt.</p><div class="method-equations"><span>e<sub>α</sub> = SLERP(e<sub>s</sub>, e<sub>r</sub>; α)</span><span>P<sub>α</sub> = αP<sub>r</sub></span></div></li>
-          <li><h3>Synthesize and audition</h3><p>A diffusion transformer generates a mel-spectrogram; BigVGAN turns it into 44.1 kHz audio. A local Flask server connects the inference model to the VST3 / AU plug-in.</p></li>
+          <li><h3>Source features</h3><p>Whisper encodes content, F0 provides pitch, and CAMPPlus encodes the two speaker identities.</p></li>
+          <li><h3>Morph conditioning</h3><p>The same α controls SLERP between speaker embeddings and reference log-mel prompt strength.</p><div class="method-equations"><span>e<sub>α</sub> = SLERP(e<sub>s</sub>, e<sub>r</sub>; α)</span><span>P<sub>α</sub> = αP<sub>r</sub></span></div></li>
+          <li><h3>Audio output</h3><p>A diffusion transformer generates mel-spectrograms; BigVGAN produces 44.1 kHz audio. A local Flask server connects the model to the VST3 / AU plug-in.</p></li>
         </ol>
-        <p class="research-note">At α = 0, synthesis is bypassed. The interactive control ends at 0.95; α = 1 is an offline evaluation endpoint. Equal slider increments need not produce equal perceptual changes.</p>
+        <p class="research-note">In the plug-in, α = 0 returns the source and the control ends at 0.95. Full conversion at α = 1 is used for offline evaluation. Equal increments need not sound equally different.</p>
       </div>
-      <figure class="plugin-figure"><a href="research/plugin-interface.png" aria-label="Open the full-size TimbreTune plug-in screenshot"><img src="research/plugin-interface.png" width="1258" height="1096" loading="lazy" alt="TimbreTune plug-in with source, reference and output waveforms, plus morph, diffusion, duration, guidance and pitch controls."></a><figcaption>Record or load a vocal, choose a reference, render, and compare inside the DAW.</figcaption></figure>
+      <figure class="plugin-figure"><a href="research/plugin-interface.png" aria-label="Open the full-size TimbreTune plug-in screenshot"><img src="research/plugin-interface.png" width="1258" height="1096" loading="lazy" alt="TimbreTune plug-in with source, reference and output waveforms, plus morph, diffusion, duration, guidance and pitch controls."></a><figcaption>Source, reference, and output inside the DAW.</figcaption></figure>
     </div>
     <details class="research-details"><summary>Plug-in controls</summary><dl class="control-list"><div><dt>Morph Amount</dt><dd>Changes speaker embedding and reference prompt conditioning together.</dd></div><div><dt>Pitch Shift / Auto F0</dt><dd>Adjust vocal register and automatic pitch alignment.</dd></div><div><dt>Length Adjust</dt><dd>Controls output duration.</dd></div><div><dt>Diffusion Steps</dt><dd>Trades rendering time against synthesis quality.</dd></div><div><dt>CFG Rate</dt><dd>Sets classifier-free guidance strength.</dd></div></dl></details>
     <details class="project-details"><summary>Project credits</summary><p>Ben Cole designed and developed TimbreTune at Northwestern University.</p><p>Annie Chu served as project mentor and contributed edits to the paper.</p><p>TimbreTune began as a class project by Ben Cole, Benjamin Auby, and Alan Wang for CS 352: Machine Perception in Music, taught by Bryan Pardo. Ben continued developing and evaluating the tool independently beyond the course.</p><p><a href="https://sites.google.com/u.northwestern.edu/timbretune">Original class-project website ↗</a></p></details>
   </section>
 
   <section id="results" class="content-section research-section wrap" aria-labelledby="results-title">
-    <div class="section-heading"><div><div class="eyebrow">Exploratory evaluation</div><h2 id="results-title">Results</h2></div><p>Preliminary characterization of five source–reference pairs. These are the figures and values reported in the current draft.</p></div>
+    <div class="section-heading"><div><div class="eyebrow">Preliminary study</div><h2 id="results-title">Results</h2></div><p>Results from the paper’s five-pair study.</p></div>
     <dl class="study-facts"><div><dt>5</dt><dd>source–reference pairs</dd></div><div><dt>21</dt><dd>settings per pair · α = 0–1, step 0.05</dd></div><div><dt>2</dt><dd>speaker encoders · internal and external</dd></div></dl>
-    <p class="study-setup">Sources span 7.2–44.0 seconds; references span 6.1–14.6 seconds. The study measures speaker-embedding cosine similarity to both inputs and an intermediateness proxy. SLERP is compared with waveform mixing, LERP, cosine, and sigmoid interpolation at α = 0.5.</p>
-    <div class="trajectory-layout"><figure class="trajectory-figure"><a href="research/similarity-trajectory.png" aria-label="Open the full-size paper similarity plot"><img src="research/similarity-trajectory.png" width="698" height="595" loading="lazy" alt="Paper plot of mean source similarity, target similarity and endpoint balance across morph amount, with separate CAMPPlus and ECAPA-TDNN panels."></a><figcaption>Mean speaker similarity and endpoint balance over the morph trajectory for five pairs. Shaded bands show variation across pairs.</figcaption></figure><div class="trajectory-reading"><h3>How identity changes</h3><p>Both encoders show source similarity decreasing and target similarity increasing as α rises. Intermediate settings balance the two, but the crossover depends on the encoder.</p><p>At α = 0.5, SLERP has the highest mean intermediateness among the compared methods in this small study: <strong>0.867</strong> with CAMPPlus and <strong>0.792</strong> with ECAPA-TDNN.</p><p>These scores describe embedding similarity. They do not establish equal perceived blending, audio quality, or a general advantage across voices.</p><p class="research-downloads"><a href="research/trajectory-campplus.csv" download>CAMPPlus trajectory CSV</a><br><a href="research/trajectory-ecapa.csv" download>ECAPA-TDNN trajectory CSV</a></p></div></div>
+    <p class="study-setup">Sources span 7.2–44.0 seconds; references span 6.1–14.6 seconds. We measure speaker similarity and intermediateness, comparing SLERP with mixing, LERP, cosine, and sigmoid interpolation at α = 0.5.</p>
+    <div class="trajectory-layout"><figure class="trajectory-figure"><a href="research/similarity-trajectory.png" aria-label="Open the full-size paper similarity plot"><img src="research/similarity-trajectory.png" width="698" height="595" loading="lazy" alt="Paper plot of mean source similarity, target similarity and endpoint balance across morph amount, with separate CAMPPlus and ECAPA-TDNN panels."></a><figcaption>Mean similarity and endpoint balance across five pairs. Shaded bands show variation between pairs.</figcaption></figure><div class="trajectory-reading"><h3>Speaker similarity</h3><p>As α rises, source similarity decreases and target similarity increases. The crossover differs between encoders.</p><p>At α = 0.5, SLERP has the highest mean intermediateness in this small comparison: <strong>0.867</strong> with CAMPPlus and <strong>0.792</strong> with ECAPA-TDNN.</p><p>These embedding scores do not establish perceived quality or a general advantage across voices.</p><p class="research-downloads"><a href="research/trajectory-campplus.csv" download>CAMPPlus trajectory CSV</a><br><a href="research/trajectory-ecapa.csv" download>ECAPA-TDNN trajectory CSV</a></p></div></div>
     <h3 class="comparison-title">Interpolation comparison</h3>
-    <p class="research-note">Mean scores reproduced from the paper. Source control (α = 0) and full conversion (α = 1) are endpoint baselines; the other rows use α = 0.5.</p>
+    <p class="research-note">Mean scores from the paper. Controls use α = 0 and 1; all other rows use α = 0.5.</p>
     <div class="results-grid"><div class="result-model"><div class="result-model-heading"><h3>CAMPPlus</h3><span>Internal speaker encoder</span></div><div class="table-scroll" tabindex="0" role="region" aria-label="CAMPPlus paper results"><table class="results-table"><caption class="visually-hidden">CAMPPlus: mean scores across five source-reference pairs</caption><thead><tr><th scope="col">Method (α)</th><th scope="col">Source<br>sim. ↑</th><th scope="col">Target<br>sim. ↑</th><th scope="col">Intermed.<br>↑</th></tr></thead><tbody><tr><th scope="row">Source Control (0.0)</th><td>0.999</td><td>0.128</td><td>0.129</td></tr>
 <tr><th scope="row">Simple Mixing (0.5)</th><td>0.863</td><td>0.326</td><td>0.464</td></tr>
 <tr><th scope="row">LERP (0.5)</th><td>0.473</td><td>0.506</td><td>0.862</td></tr>
@@ -91,22 +91,22 @@
 <tr class="result-highlight"><th scope="row">TimbreTune SLERP (0.5)</th><td>0.319</td><td>0.444</td><td>0.792</td></tr>
 <tr><th scope="row">Full Conversion (1.0)</th><td>0.165</td><td>0.654</td><td>0.511</td></tr>
 </tbody></table></div></div></div>
-    <p class="research-downloads"><a href="research/paper-results.csv" download>Download table CSV</a> · <a href="research/provenance.json">Figure and data provenance</a></p>
-    <details class="research-details"><summary>What the scores measure</summary><p>Source and target similarity are cosine similarities between each output’s speaker embedding and the input recordings. CAMPPlus is used inside Seed-VC; ECAPA-TDNN provides an external view.</p><p>The reported intermediateness proxy is 1 − |source similarity − target similarity|, calculated per output and then averaged. Higher values mean more balanced similarity to the two inputs, even when both similarities are low.</p></details>
-    <div class="findings-note"><h3>Listening observations and limitations</h3><p>Informal listening suggested timbral blends that retained source timing, pitch contour, and phrasing. The perceived midpoint was not consistently α = 0.5, and some outputs had “crunchy” distortion. These observations are exploratory, without a controlled listening study.</p><p>The paper proposes more conservative guidance and step settings, better export headroom, and smoother chunk overlaps as possible improvements. The cause of the remaining artifacts is not established.</p></div>
-    <p class="research-note showcase-distinction">The listening samples use the offline rendering workflow described in Audio details. The results here evaluate the plug-in’s SLERP method.</p>
-    <details class="research-details"><summary>Responsible use</summary><p>TimbreTune is designed for creative timbre blending. Use self-recorded or explicitly consented reference audio. The 0.95 morph limit discourages full conversion but does not prevent a recognizable reference voice or eliminate misuse.</p></details>
+    <p class="research-downloads"><a href="research/paper-results.csv" download>Download table CSV</a> · <a href="research/provenance.json">Data sources</a></p>
+    <details class="research-details"><summary>Score definitions</summary><p>Similarity is the cosine similarity between output and input speaker embeddings. CAMPPlus is Seed-VC’s encoder; ECAPA-TDNN is an external encoder.</p><p>Intermediateness is 1 − |source similarity − target similarity|, computed per output and averaged. A high score means balanced similarity, even if both similarities are low.</p></details>
+    <div class="findings-note"><h3>Listening observations</h3><p>Informal listening suggested retained timing, pitch, and phrasing. The perceived midpoint varied, and some outputs had “crunchy” distortion. No controlled listening study was conducted.</p><p>Possible improvements include guidance tuning, export headroom, and smoother chunk overlaps. The cause of the remaining artifacts is unconfirmed.</p></div>
+    <p class="research-note showcase-distinction">The listening samples use a separate offline workflow; these results evaluate the plug-in’s SLERP method.</p>
+    <details class="research-details"><summary>Responsible use</summary><p>Use self-recorded or explicitly consented reference audio. The 0.95 limit does not prevent recognizable voices or eliminate misuse.</p></details>
   </section>
 
   <section id="latency" class="content-section wrap" aria-labelledby="latency-title">
-    <div class="section-heading"><div><div class="eyebrow">Latency</div><h2 id="latency-title">Rendering time</h2></div><p>Measured on an Apple M1 Pro with 16 GB memory using PyTorch MPS. Times run from submitting a request to downloading the finished WAV.</p></div>
+    <div class="section-heading"><div><div class="eyebrow">Latency</div><h2 id="latency-title">Rendering time</h2></div><p>Measured from HTTP submission to WAV download on a 16 GB M1 Pro using PyTorch MPS.</p></div>
     <div class="latency-summary">
-      <div class="latency-stat"><strong id="latency-example-time">41.35 s</strong><span id="latency-example-description">Mean render time for a 5-second input at 100 diffusion steps</span></div>
-      <div class="latency-stat"><strong id="latency-success">132 / 132</strong><span id="latency-configurations">Successful measured requests across 44 configurations</span></div>
+      <div class="latency-stat"><strong id="latency-example-time">41.35 s</strong><span id="latency-example-description">Mean for a 5-second input at 100 steps</span></div>
+      <div class="latency-stat"><strong id="latency-success">132 / 132</strong><span id="latency-configurations">Successful requests across 44 configurations</span></div>
       <div class="latency-stat"><strong>Excluded</strong><span id="latency-startup-description">Cached startup: 11.81 s in the original test; 14.39 s in the follow-up</span></div>
     </div>
     <div class="latency-chart">
-      <div class="latency-controls"><h3>Compare diffusion step counts</h3><div class="latency-buttons" role="group" aria-label="Diffusion steps for latency chart"></div></div>
+      <div class="latency-controls"><h3>Diffusion steps</h3><div class="latency-buttons" role="group" aria-label="Diffusion steps for latency chart"></div></div>
       <p id="latency-selected" role="status" aria-live="polite">100 diffusion steps · mean of 3 requests per duration · separate follow-up</p>
       <div id="latency-bars" class="latency-bars" role="list" aria-label="Mean end-to-end rendering time by source duration">
         <div class="latency-row" role="listitem"><span class="latency-duration">5 s input</span><span class="latency-track" aria-hidden="true"><span style="width:31.81%"></span></span><span class="latency-value">41.35 s</span></div>
@@ -115,7 +115,7 @@
       <div class="latency-axis"><span>Mean elapsed time</span><span id="latency-scale">Shared scale: 0–130 seconds</span></div>
     </div>
     <p class="latency-context" id="latency-context">The original benchmark covers 1–50 steps. Results at 60–120 steps come from a separate test with 5-second and 10-second inputs. Both use CFG 0.7 and Auto F0 on. The listening samples use additional offline processing that is not included in this plug-in benchmark. These tests measure time, not audio quality.</p>
-    <details class="latency-details"><summary>Measurements and test setup</summary>
+    <details class="latency-details"><summary>Test setup and measurements</summary>
       <p id="latency-test-setup">Three repetitions per tested configuration, in randomized order after warm-up. An 8-second reference, morph amount 0.5, length factor 1, and no pitch shift. The two benchmark sessions were measured separately.</p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Latency measurements table"><table class="latency-table"><caption>Mean ± sample standard deviation, in seconds · n = 3 per tested cell</caption><thead><tr><th scope="col">Source</th></tr></thead><tbody id="latency-table-body"></tbody></table></div>
       <p><a href="latency/summary.csv" download>Download summary CSV</a> · <a href="latency/observations.csv" id="latency-observations" download>All 132 observations</a> · <a href="latency/methodology.md">Full methodology</a></p>
